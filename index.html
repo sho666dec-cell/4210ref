@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Equipment Estimator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Equipment Selection</h1>
+
+        <div id="breadcrumb" class="breadcrumb">Category Select...</div>
+
+        <h2>Step 1: Type</h2>
+        <div id="main-categories" class="button-group">
+            <button onclick="selectCategory('A')">ハーネス</button>
+            <button onclick="selectCategory('B')">ヘルメット</button>
+        </div>
+
+        <h2>Step 2: Series</h2>
+        <div id="sub-categories" class="button-group"></div>
+
+        <h2>Step 3: Items</h2>
+        <div id="sub-sub-categories" class="item-list-container"></div>
+
+        <div id="estimate-summary">
+            <h2>Current Estimate</h2>
+            <table id="estimate-table">
+                <thead>
+                   <tr>
+                       <th>製品名 / 仕様</th>
+                       <th style="text-align:right;">単価</th>
+                       <th style="text-align:center;">数量</th>
+                       <th style="text-align:right;">小計</th>
+                       <th></th>
+                   </tr>
+                </thead>
+    <tbody id="summary-list"></tbody>
+</table>
+            
+            <div class="total-display">
+                <span class="currency">TOTAL JPY</span><br>
+                ¥<span id="total-price">0</span>
+            </div>
+
+            <div class="export-group">
+                <button class="export-btn" onclick="exportCSV()">CSV保存(Excel用)</button>
+                <button class="export-btn" onclick="exportJSON()">JSON保存</button>
+                <button class="reset-btn" onclick="resetEstimate()">最初からやり直す</button>
+            </div>
+        </div>
+
+        <button id="download-btn" onclick="window.print()">PRINT / PDF DOWNLOAD</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

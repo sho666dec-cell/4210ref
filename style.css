@@ -1,0 +1,73 @@
+:root {
+    --petzl-yellow: #FFD300;
+    --petzl-black: #1A1A1A;
+    --petzl-gray: #F4F4F4;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--petzl-gray);
+    color: var(--petzl-black);
+    padding: 20px;
+    margin: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+h1 { text-align: center; border-bottom: 8px solid var(--petzl-yellow); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+
+/* パンくずリスト */
+.breadcrumb { margin-bottom: 20px; font-size: 0.85rem; color: #888; font-weight: bold; }
+.breadcrumb-link { cursor: pointer; text-decoration: underline; margin: 0 5px; }
+.breadcrumb-link:hover { background: var(--petzl-yellow); color: #000; text-decoration: none; }
+
+/* ボタン類 */
+.button-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+button { padding: 10px 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-weight: bold; transition: 0.2s; }
+button.active { background: var(--petzl-black) !important; color: var(--petzl-yellow) !important; }
+
+/* 商品選択行 */
+.item-row { display: flex; align-items: center; padding: 15px 10px; border-bottom: 1px solid #eee; }
+.id-badge { font-family: monospace; background: var(--petzl-yellow); padding: 2px 8px; font-weight: bold; margin: 0 10px; min-width: 85px; text-align: center; border: 1px solid #000; }
+select { padding: 5px; border: 1px solid #000; font-size: 0.85rem; margin-right: 5px; cursor: pointer; }
+
+/* 見積もりテーブル */
+#estimate-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 20px; }
+#estimate-table th { background: var(--petzl-black); color: var(--petzl-yellow); padding: 12px; font-size: 0.75rem; text-align: left; }
+#estimate-table td { padding: 12px 10px; border-bottom: 1px solid #ddd; }
+
+/* カラム幅設定 */
+#estimate-table th:nth-child(1) { width: 100px; }
+#estimate-table th:nth-child(2) { width: auto; }
+#estimate-table th:nth-child(3) { width: 110px; text-align: right; }
+#estimate-table th:nth-child(4) { width: 100px; text-align: center; }
+#estimate-table th:nth-child(5) { width: 120px; text-align: right; }
+#estimate-table th:nth-child(6) { width: 50px; text-align: center; }
+
+/* 数量ボタン */
+.qty-btn-container { display: flex; align-items: center; justify-content: center; gap: 5px; }
+.qty-btn { width: 25px; height: 25px; padding: 0; line-height: 1; border: 1px solid #000; }
+.delete-btn { background: none; border: none; color: #ccc; cursor: pointer; font-size: 1rem; }
+.delete-btn:hover { color: #ff4444; }
+
+/* 合計表示 */
+.total-display { text-align: right; font-size: 3rem; font-weight: 900; border-right: 15px solid var(--petzl-yellow); padding-right: 20px; margin: 30px 0; background: #fafafa; }
+.currency { font-size: 0.8rem; color: #888; }
+
+/* 操作ボタン群 */
+.export-group { display: flex; gap: 10px; margin-top: 20px; }
+.export-btn { background: #444; color: #fff; border: none; font-size: 0.75rem; }
+.reset-btn { background: #fff; color: #ff4444; border: 1px solid #ff4444; font-size: 0.75rem; }
+.reset-btn:hover { background: #ff4444; color: #fff; }
+
+/* トースト */
+.toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: var(--petzl-black); color: var(--petzl-yellow); padding: 12px 25px; font-weight: bold; transition: 0.4s; z-index: 10000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+.toast.show { bottom: 30px; }
+
+@media print { .button-group, .export-group, #download-btn, .add-btn, .delete-btn, .qty-btn { display: none !important; } }
