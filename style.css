@@ -1,73 +1,558 @@
 :root {
-    --petzl-yellow: #FFD300;
-    --petzl-black: #1A1A1A;
-    --petzl-gray: #F4F4F4;
+    --petzl-yellow: #ffeb00;    /* 高視認性イエロー */
+    --petzl-black: #1a1a1a;     /* 力強いブラック */
+    --bg-white: #ffffff;        /* クリーンなホワイト */
+    --text-main: #333333;       /* メイン文字 */
+    --border-color: #dddddd;    /* 境界線 */
+    --card-bg: #fafafa;         /* 要素背景（極薄いグレー） */
 }
 
 body {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    background-color: var(--petzl-gray);
-    color: var(--petzl-black);
-    padding: 20px;
+    background-color: var(--bg-white);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0 auto;
-    background: #fff;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-h1 { text-align: center; border-bottom: 8px solid var(--petzl-yellow); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+h1 {
+    text-align: center;
+    border-bottom: 8px solid var(--petzl-yellow); /* 黄色の太いライン */
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--petzl-black);
+}
 
-/* パンくずリスト */
-.breadcrumb { margin-bottom: 20px; font-size: 0.85rem; color: #888; font-weight: bold; }
-.breadcrumb-link { cursor: pointer; text-decoration: underline; margin: 0 5px; }
-.breadcrumb-link:hover { background: var(--petzl-yellow); color: #000; text-decoration: none; }
+h2 {
+    font-size: 1rem;
+    color: var(--text-main);
+    background-color: #eee;
+    padding: 8px 15px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
 
-/* ボタン類 */
-.button-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-button { padding: 10px 20px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-weight: bold; transition: 0.2s; }
-button.active { background: var(--petzl-black) !important; color: var(--petzl-yellow) !important; }
+/* --- パンくずリスト --- */
+#breadcrumb {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 30px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
 
-/* 商品選択行 */
-.item-row { display: flex; align-items: center; padding: 15px 10px; border-bottom: 1px solid #eee; }
-.id-badge { font-family: monospace; background: var(--petzl-yellow); padding: 2px 8px; font-weight: bold; margin: 0 10px; min-width: 85px; text-align: center; border: 1px solid #000; }
-select { padding: 5px; border: 1px solid #000; font-size: 0.85rem; margin-right: 5px; cursor: pointer; }
+.breadcrumb-link {
+    cursor: pointer;
+    color: var(--text-main);
+    text-decoration: underline;
+}
 
-/* 見積もりテーブル */
-#estimate-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 20px; }
-#estimate-table th { background: var(--petzl-black); color: var(--petzl-yellow); padding: 12px; font-size: 0.75rem; text-align: left; }
-#estimate-table td { padding: 12px 10px; border-bottom: 1px solid #ddd; }
+.breadcrumb-link:hover {
+    background-color: var(--petzl-yellow);
+    color: var(--petzl-black);
+    text-decoration: none;
+}
 
-/* カラム幅設定 */
-#estimate-table th:nth-child(1) { width: 100px; }
-#estimate-table th:nth-child(2) { width: auto; }
-#estimate-table th:nth-child(3) { width: 110px; text-align: right; }
-#estimate-table th:nth-child(4) { width: 100px; text-align: center; }
-#estimate-table th:nth-child(5) { width: 120px; text-align: right; }
-#estimate-table th:nth-child(6) { width: 50px; text-align: center; }
+.active-step {
+    font-weight: bold;
+    color: var(--petzl-black);
+}
 
-/* 数量ボタン */
-.qty-btn-container { display: flex; align-items: center; justify-content: center; gap: 5px; }
-.qty-btn { width: 25px; height: 25px; padding: 0; line-height: 1; border: 1px solid #000; }
-.delete-btn { background: none; border: none; color: #ccc; cursor: pointer; font-size: 1rem; }
-.delete-btn:hover { color: #ff4444; }
+/* --- ボタン類（Step 1, 2） --- */
+.button-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+}
 
-/* 合計表示 */
-.total-display { text-align: right; font-size: 3rem; font-weight: 900; border-right: 15px solid var(--petzl-yellow); padding-right: 20px; margin: 30px 0; background: #fafafa; }
-.currency { font-size: 0.8rem; color: #888; }
+.button-group button {
+    background: var(--bg-white);
+    color: var(--petzl-black);
+    border: 2px solid var(--petzl-black); /* 黒い太めの枠 */
+    padding: 14px 28px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
 
-/* 操作ボタン群 */
-.export-group { display: flex; gap: 10px; margin-top: 20px; }
-.export-btn { background: #444; color: #fff; border: none; font-size: 0.75rem; }
-.reset-btn { background: #fff; color: #ff4444; border: 1px solid #ff4444; font-size: 0.75rem; }
-.reset-btn:hover { background: #ff4444; color: #fff; }
+.button-group button:hover {
+    background-color: #f0f0f0;
+}
 
-/* トースト */
-.toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: var(--petzl-black); color: var(--petzl-yellow); padding: 12px 25px; font-weight: bold; transition: 0.4s; z-index: 10000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-.toast.show { bottom: 30px; }
+.button-group button.active {
+    background-color: var(--petzl-yellow) !important; /* アクティブは黄色 */
+    color: var(--petzl-black) !important;
+    border-color: var(--petzl-yellow);
+    box-shadow: 0 4px 0 #d4c300; /* 立体感のある影 */
+    transform: translateY(-2px);
+}
 
-@media print { .button-group, .export-group, #download-btn, .add-btn, .delete-btn, .qty-btn { display: none !important; } }
+/* --- 商品選択行（Step 3） --- */
+.item-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 60px;
+}
+
+.item-row {
+    display: grid;
+    grid-template-columns: 2.5fr 1.2fr 1.2fr 1fr auto;
+    align-items: end;
+    background: var(--card-bg);
+    padding: 20px 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.item-row strong {
+    font-size: 1.1rem;
+    color: var(--petzl-black);
+}
+
+/* 小窓（セレクトボックス）の役割ラベル */
+.select-group label {
+    font-size: 0.75rem;
+    color: #555;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+select {
+    background: var(--bg-white);
+    color: var(--petzl-black);
+    border: 2px solid var(--petzl-black); /* 黒枠 */
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.price-tag {
+    text-align: right;
+    font-weight: bold;
+    font-size: 1.2rem;
+    font-family: 'Roboto Mono', monospace;
+    color: var(--petzl-black);
+    padding-bottom: 5px;
+}
+
+.add-btn {
+    background: var(--petzl-black); /* 追加ボタンは黒 */
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background: #444;
+}
+
+/* --- 見積もりテーブル (整理版) --- */
+#estimate-summary {
+    margin-top: 50px;
+    border-top: 2px solid var(--petzl-black);
+    padding-top: 30px;
+}
+
+#estimate-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* カラム幅を厳密に固定 */
+    margin-bottom: 20px;
+}
+
+/* ヘッダー共通設定 */
+#estimate-table th {
+    background-color: var(--petzl-black);
+    color: #fff;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    padding: 10px;
+}
+
+/* 各カラムの役割と幅の確定（ここを一箇所に集約） */
+#estimate-table th:nth-child(1), 
+#estimate-table td:nth-child(1) { 
+    width: auto;         /* 他が狭くなった分、自動で広がる */
+    text-align: left;
+    padding-left: 15px;  /* 左端に少し余裕を持たせる */
+}
+
+#estimate-table th:nth-child(2), 
+#estimate-table td:nth-child(2) { 
+    width: 140px;
+    text-align: right;
+    font-family: 'Roboto Mono', monospace; /* 数字を揃えてスッキリ見せる */
+}
+
+/* 3列目：数量（ボタンと数字が収まる限界まで） */
+#estimate-table th:nth-child(3), 
+#estimate-table td:nth-child(3) { 
+    width: 75px;         /* 85pxからさらに絞り込み */
+    text-align: center;
+}
+
+#estimate-table th:nth-child(4), 
+#estimate-table td:nth-child(4) { 
+    width: 140px;        /* ここは「ゆったり」をキープ */
+    text-align: justify;
+    padding-right: 70px;
+}
+
+#estimate-table th:nth-child(5), 
+#estimate-table td:nth-child(5) { width: 45px; text-align: center; }  /* 削除 */
+
+/* セル内のテキスト制御（自動フォント調整用） */
+#estimate-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-white);
+    white-space: nowrap;   /* 一行に強制 */
+    overflow: hidden;      /* はみ出し防止 */
+}
+
+/* 製品名の強調（JSでサイズ調整される対象） */
+#estimate-table td strong {
+    display: inline-block; 
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+/* --- 合計表示エリア (整理版) --- */
+.total-container {
+    display: flex;
+    justify-content: flex-end; /* 右寄せ */
+    align-items: baseline;
+    margin-top: 20px;
+    padding: 20px 30px;
+    background-color: var(--petzl-yellow);
+    color: var(--petzl-black);
+    border-radius: 8px;
+    /* 影を少しシャープにして Petzl らしく */
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1); 
+}
+
+.total-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 15px;
+}
+
+#total-price-wrapper {
+    font-family: 'Roboto Mono', monospace;
+}
+
+#total-price {
+    font-size: 3.2rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.currency-unit {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* --- トースト通知（黄色ベース） --- */
+.toast {
+    background: var(--bg-white);
+    color: var(--petzl-black);
+    padding: 18px 30px;
+    border-radius: 4px;
+    border: 2px solid var(--petzl-black);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+}
+
+/* トーストの左側に黄色の縦ライン */
+.toast::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 8px;
+    height: 100%;
+    background-color: var(--petzl-yellow);
+}
+
+.customer-input {
+    width: 100%;
+    max-width: 400px;
+    font-size: 1.2rem;
+    padding: 10px;
+    border: 2px solid var(--petzl-black);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+.customer-input:focus {
+    outline: none;
+    border-color: var(--petzl-yellow);
+    box-shadow: 0 0 8px rgba(255, 235, 0, 0.5);
+}
+/* 通常時は隠す */
+.print-only { display: none; }
+
+/* --- 印刷用最終調整 --- */
+@media print {
+    /* 背景色と色を強制的に印刷 */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* 不要な要素を非表示 */
+    .no-print, 
+    .customer-name-section, 
+    h1, h2, #breadcrumb, 
+    .selection-section, 
+    .qty-btn, .delete-btn, .export-group, .add-btn, 
+    #toast-container {
+        display: none !important;
+    }
+
+    /* 印刷専用エリアを表示 */
+    .print-only {
+        display: block !important;
+    }
+
+    /* 見積テーブルのレイアウト固定 */
+    #estimate-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin-top: 30px;
+    }
+
+    #estimate-table th {
+        background-color: var(--petzl-black) !important;
+        color: #fff !important;
+        padding: 10px;
+        font-size: 9pt;
+    }
+
+    /* カラム幅：削除ボタン列(5列目)を消すため再配分 */
+    #estimate-table th:nth-child(1), #estimate-table td:nth-child(1) { width: 55%; text-align: left; }
+    #estimate-table th:nth-child(2), #estimate-table td:nth-child(2) { width: 15%; text-align: right; }
+    #estimate-table th:nth-child(3), #estimate-table td:nth-child(3) { width: 10%; text-align: center !important; }
+    #estimate-table th:nth-child(4), #estimate-table td:nth-child(4) { width: 20%; text-align: right; }
+    #estimate-table th:nth-child(5), #estimate-table td:nth-child(5) { display: none; } /* 削除ボタン列を非表示 */
+
+    #estimate-table td {
+        border-bottom: 1px solid #000;
+        padding: 4px 8px !important;
+        font-size: 10pt;
+        white-space: nowrap; /* JSの自動フォント調整が効くように一行に */
+    }
+
+    /* 合計金額ボックス（右下に配置） */
+    .total-container {
+        float: right;
+        width: 320px;
+        background-color: var(--petzl-yellow) !important;
+        border: 2px solid #000;
+        text-align: right;
+        padding: 15px 25px;
+        margin-top: 30px;
+        box-shadow: none; /* 印刷時は影を消す */
+    }
+
+    .total-label {
+        font-size: 12pt;
+    }
+
+    #total-price {
+        font-size: 28pt;
+        font-weight: 900;
+        color: #000;
+    }
+
+    /* 改ページ対策：テーブルの途中でページが切れないように */
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; page-break-after: auto; }
+}
+
+/* 3. 画面上でも「プレビュー」として見せたい場合の調整 */
+.customer-name-section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-left: 5px solid var(--petzl-yellow);
+}
+    
+    /* 1. ヘッダー：宛名と発行元 */
+    .print-top-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+    }
+
+    .estimate-title-box {
+        font-size: 24px;
+        font-weight: bold;
+        border-bottom: 4px solid var(--petzl-yellow);
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    .client-name-area {
+        font-size: 18px;
+        border-bottom: 1px solid #000;
+        margin-bottom: 15px;
+        min-width: 300px;
+    }
+
+    .issuer-side { text-align: right; position: relative; }
+    .company-name { font-size: 1.2rem; font-weight: bold; }
+    .stamp-box {
+        position: absolute;
+        right: 10px; bottom: -10px;
+        width: 60px; height: 60px;
+        border: 1px solid #ccc;
+        color: #ccc;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 50%;
+    }
+
+ /* --- 印刷用：全体を右に寄せるイメージの配分 --- */
+
+/* 1列目：製品名（削った分をここに乗せて最大化） */
+#estimate-table th:nth-child(1), 
+#estimate-table td:nth-child(1) { 
+    width: 67%;         /* さらに広く（65% → 70%） */
+    text-align: left; 
+}
+
+/* 2列目：単価（現状維持） */
+#estimate-table th:nth-child(2), 
+#estimate-table td:nth-child(2) { 
+    width: 12%;         /* 維持 */
+    text-align: right; 
+}
+
+/* 3列目：数量（現状維持） */
+#estimate-table th:nth-child(3), 
+#estimate-table td:nth-child(3) { 
+    width: 8%;          /* 維持 */
+    text-align: center !important; 
+}
+
+/* 4列目：金額（見切れ防止・完全センター寄せ） */
+#estimate-table th:nth-child(4), 
+#estimate-table td:nth-child(4) { 
+    width: 13%;          /* 10%だと少し狭すぎる可能性があるため、13%に微増 */
+    text-align: center !important; 
+    padding-left: 0 !important;   /* 左右の余白をリセットして */
+    padding-right: 0 !important;  /* 枠の真ん中に文字が来るようにする */
+}
+
+    /* 3. 合計エリア：画像のように右側に配置 */
+    .total-container {
+        float: right;
+        width: 300px;
+        background-color: var(--petzl-yellow) !important;
+        -webkit-print-color-adjust: exact;
+        border: 1px solid #000;
+        text-align: right;
+        padding: 15px;
+    }
+
+    #total-price { font-size: 2rem; color: #000;
+}
+/* --- スマートフォン・タブレット向けの調整 --- */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px; /* 余白を少し狭く */
+    }
+
+    h1 {
+        font-size: 1.5rem; /* タイトルを少し小さく */
+        margin-bottom: 20px;
+    }
+
+    /* カテゴリボタンを2列に並べる */
+    .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .button-group button {
+        padding: 12px 10px;
+        font-size: 0.85rem;
+    }
+
+    /* 商品行を「横並び」から「縦型カード」に変更 */
+    .item-row {
+        display: flex;
+        flex-direction: column; /* 縦に積む */
+        align-items: stretch;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .item-row > span:first-child {
+        font-size: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 8px;
+    }
+
+    /* カラー・サイズ選択、価格を横に並べる */
+    .item-row > div, 
+    .price-tag {
+        margin-right: 0;
+        text-align: left;
+    }
+
+    /* スマホでは追加ボタンを全幅にして押しやすく */
+    .add-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 1rem;
+    }
+
+    /* 見積もりテーブルを横スクロール可能に、または簡略化 */
+    #estimate-table th:nth-child(2), 
+    #estimate-table td:nth-child(2) {
+        display: none; /* 単価を隠してスッキリさせる（任意） */
+    }
+
+    #total-price {
+        font-size: 2.2rem;
+    }
+}
+
+/* タップの反応を良くする（モバイル用） */
+@media (hover: none) {
+    .button-group button:active,
+    .add-btn:active {
+        background-color: var(--petzl-yellow);
+        transform: scale(0.98);
+    }
+}
