@@ -162,7 +162,7 @@ const data = {
                         ]
                     },
                     'C-1-3': { 
-                        name: 'グリヨン フック（欧州バージョン', 
+                        name: 'グリヨン フック（欧州バージョン）', 
                         variants: [
                             { color: 'ホワイト/ブラック', size: '2m', price: 31000 },
                             { color: 'ホワイト/ブラック', size: '3m', price: 32100 },

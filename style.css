@@ -594,3 +594,82 @@ select {
         letter-spacing: -0.5px;
     }
 }
+
+/* ============================================================
+   1. PC版（基本設定）：すべてを横一行に強制する
+   ============================================================ */
+.item-row {
+    display: flex !important;
+    flex-direction: row !important; /* 横並び */
+    align-items: center !important;
+    justify-content: bace-between;
+    gap: 15px;
+    padding: 10px;
+}
+
+/* PCでは製品名エリアを広げる */
+.item-name-area {
+    flex: 1;
+    margin-bottom: 0 !important;
+    border-bottom: none !important;
+}
+
+/* PCでは操作エリアも横に並べる */
+.item-controls-area {
+    display: flex !important;
+    flex-direction: row !important; /* 横並び */
+    align-items: center !important;
+    gap: 15px;
+}
+
+.select-group {
+    display: flex !important;
+    flex-direction: row !important; /* 横並び */
+    gap: 10px;
+}
+
+.price-action-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px;
+}
+
+/* ============================================================
+   2. スマホ版（768px以下）：ここだけ「二段・カード形式」にする
+   ============================================================ */
+@media screen and (max-width: 768px) {
+    .item-row {
+        flex-direction: column !important; /* 縦（二段）にする */
+        align-items: stretch !important;
+        padding: 15px !important;
+        border-bottom: 2px solid #eee;
+    }
+
+    .item-name-area {
+        font-size: 1.1rem;
+        margin-bottom: 8px !important;
+        border-bottom: 2px solid var(--petzl-yellow) !important;
+        padding-bottom: 5px;
+    }
+
+    .item-controls-area, 
+    .select-group {
+        flex-direction: column !important; /* スマホ内部も縦に */
+        gap: 10px;
+    }
+
+    /* カラーとサイズだけはスマホでも横に並べたい場合 */
+    .select-group {
+        flex-direction: row !important; 
+    }
+
+    .price-action-group {
+        justify-content: space-between !important;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .add-btn {
+        width: 100px !important;
+    }
+}
