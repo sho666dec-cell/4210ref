@@ -212,8 +212,12 @@ const data = {
 let currentEstimateItems = JSON.parse(localStorage.getItem('petzl_final_v5')) || [];
 let currentKeys = { cat: '', sub: '' };
 
-window.onload = () => {
-    renderTable(); // ページ読み込み時に保存データを反映
+    // ページ読み込み時に保存データを表示
+    window.onload = () => {
+        if(localStorage.getItem('petzl_final_v5')){
+            currentEstimateItems = JSON.parse(localStorage.getItem('petzl_final_v5'));
+            renderTable();
+    }
 };
 
 // --- カテゴリ選択 (Step 1) ---
@@ -479,11 +483,3 @@ document.addEventListener('DOMContentLoaded', () => {
     if(inUser) inUser.addEventListener('input', sync);
     if(inTel) inTel.addEventListener('input', sync);
 });
-
-    // ページ読み込み時に保存データを表示
-    window.onload = () => {
-        if(localStorage.getItem('petzl_final_v5')){
-            currentEstimateItems = JSON.parse(localStorage.getItem('petzl_final_v5'));
-            renderTable();
-    }
-};
