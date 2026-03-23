@@ -550,3 +550,47 @@ select {
         width: auto !important;
     }
 }
+/* --- 長い製品名と高額見積もりの自動調整 --- */
+
+/* 1. 製品名が長い（font-smallクラスが付いた）時の処理 */
+.col-name.font-small strong {
+    font-size: 0.9rem !important; /* 少し小さくして1行の許容量を増やす */
+    letter-spacing: -0.5px;      /* 文字間をわずかに詰める */
+    display: inline-block;
+    white-space: nowrap;         /* 1行を維持 */
+}
+
+/* 2. 金額が7桁以上の時の処理（スマホ・PC共通） */
+.col-subtotal.font-narrow {
+    font-size: 0.9rem !important;
+    letter-spacing: -1px;        /* 数字をギュッと詰める */
+}
+
+/* 3. スマホ表示での追い込み調整 */
+@media screen and (max-width: 768px) {
+    /* 数量表示の数字が消えないよう、最低幅を確保 */
+    .qty-display {
+        display: inline-block;
+        min-width: 30px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    /* 4列目（小計）が見切れないよう、スマホでは少しマージンを調整 */
+    #estimate-table td:nth-child(4) {
+        margin-right: 0;
+        font-weight: bold;
+    }
+}
+
+/* 4. 印刷（PDF）時のフォント追い込み */
+@media print {
+    .col-name.font-small strong {
+        font-size: 9pt !important;
+    }
+    .col-subtotal.font-narrow {
+        font-size: 9pt !important;
+        letter-spacing: -0.5px;
+    }
+}

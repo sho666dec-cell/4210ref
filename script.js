@@ -357,15 +357,19 @@ function renderTable() {
     let totalQty = 0;
 
     // 2. HTML作成と計算
-    currentEstimateItems.forEach((item, i) => {
-        const subtotal = item.price * item.quantity;
-        total += subtotal;
-        totalQty += item.quantity;
+currentEstimateItems.forEach((item, i) => {
+    const subtotal = item.price * item.quantity;
+    total += subtotal;
+    totalQty += item.quantity;
 
-        // 【修正ポイント】スマホでカード化、PCでテーブルを維持する構造
-        tbody.innerHTML += `
+    // 製品名の長さによってクラスを分岐（20文字以上なら小さく）
+    const nameClass = item.name.length > 20 ? 'font-small' : '';
+    // 金額が7桁（1,000,000〜）ならクラスを付与
+    const priceClass = subtotal >= 1000000 ? 'font-narrow' : '';
+
+    tbody.innerHTML += `
     <tr>
-        <td class="col-name">
+        <td class="col-name ${nameClass}">
             <strong>${item.name}</strong><br>
             <small style="color:#888;">${item.variant}</small>
         </td>
@@ -373,25 +377,40 @@ function renderTable() {
         <td class="col-qty">
             <div class="qty-btn-container">
                 <button class="qty-btn minus" onclick="updateQty(${i},-1)">-</button>
-                <span class="qty-display" style="min-width:30px; text-align:center; font-weight:bold;">${item.quantity}</span>
+                <span class="qty-display">${item.quantity}</span>
                 <button class="qty-btn plus" onclick="updateQty(${i},1)">+</button>
             </div>
         </td>
-        <td class="col-subtotal">¥${subtotal.toLocaleString()}</td>
+        <td class="col-subtotal ${priceClass}">¥${subtotal.toLocaleString()}</td>
         <td class="col-delete">
-           <button class="delete-btn" onclick="del(${i})">✕</button>
+            <button class="delete-btn" onclick="del(${i})">✕</button>
         </td>
     </tr>`;
-    });
+});
 
-    // 3. 合計金額・数量の更新
+// --- 3. 合計金額・数量の表示更新とサイズ調整 ---
     const totalPriceElem = document.getElementById('total-price');
-    if (totalPriceElem) totalPriceElem.innerText = total.toLocaleString();
-
     const totalQtyElem = document.getElementById('total-qty');
-    if (totalQtyElem) totalQtyElem.innerText = totalQty;
 
-    // 4. 保存
+    if (totalPriceElem) {
+        // カンマ区切りの金額を代入
+        totalPriceElem.innerText = total.toLocaleString();
+
+        // 7桁以上（1,000,000〜）ならフォントを小さく、文字間を詰める
+        if (total >= 1000000) {
+            totalPriceElem.style.fontSize = "2.2rem"; 
+            totalPriceElem.style.letterSpacing = "-2px";
+        } else {
+            totalPriceElem.style.fontSize = "2.8rem";
+            totalPriceElem.style.letterSpacing = "normal";
+        }
+    }
+
+    if (totalQtyElem) {
+        totalQtyElem.innerText = totalQty;
+    }
+
+    // --- 4. ローカルストレージに保存 ---
     localStorage.setItem('petzl_final_v5', JSON.stringify(currentEstimateItems));
 }
 
