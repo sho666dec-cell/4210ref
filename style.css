@@ -529,7 +529,7 @@ select {
     .qty-btn-container {
         display: inline-flex !important;
         align-items: center;
-        gap: 10px;
+        gap: 5px;
         background: #f0f0f0;
         padding: 5px 10px;
         border-radius: 6px;
