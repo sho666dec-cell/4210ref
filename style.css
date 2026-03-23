@@ -168,7 +168,7 @@ select {
     background: #444;
 }
 
-/* --- 見積もりテーブル (整理版) --- */
+/* --- 見積もりテーブル --- */
 #estimate-summary {
     margin-top: 50px;
     border-top: 2px solid var(--petzl-black);
@@ -178,102 +178,107 @@ select {
 #estimate-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* カラム幅を厳密に固定 */
-    margin-bottom: 20px;
 }
 
-/* ヘッダー共通設定 */
 #estimate-table th {
-    background-color: var(--petzl-black);
+    text-align: left;
     color: #fff;
+    background-color: var(--petzl-black); /* ヘッダーは黒 */
     font-size: 0.8rem;
     text-transform: uppercase;
-    padding: 10px;
+    padding: 8px 15px;
 }
 
-/* 各カラムの役割と幅の確定（ここを一箇所に集約） */
-#estimate-table th:nth-child(1), 
-#estimate-table td:nth-child(1) { 
-    width: auto;         /* 他が狭くなった分、自動で広がる */
-    text-align: left;
-    padding-left: 15px;  /* 左端に少し余裕を持たせる */
+#estimate-table th:nth-child(3) {
+    width: 80px;         /* 幅を狭く固定 */
+    text-align: center;   /* 中央寄せ */
 }
 
-#estimate-table th:nth-child(2), 
-#estimate-table td:nth-child(2) { 
-    width: 140px;
-    text-align: right;
-    font-family: 'Roboto Mono', monospace; /* 数字を揃えてスッキリ見せる */
-}
-
-/* 3列目：数量（ボタンと数字が収まる限界まで） */
-#estimate-table th:nth-child(3), 
-#estimate-table td:nth-child(3) { 
-    width: 75px;         /* 85pxからさらに絞り込み */
-    text-align: center;
-}
-
-#estimate-table th:nth-child(4), 
-#estimate-table td:nth-child(4) { 
-    width: 140px;        /* ここは「ゆったり」をキープ */
-    text-align: justify;
-    padding-right: 70px;
-}
-
-#estimate-table th:nth-child(5), 
-#estimate-table td:nth-child(5) { width: 45px; text-align: center; }  /* 削除 */
-
-/* セル内のテキスト制御（自動フォント調整用） */
 #estimate-table td {
     padding: 6px 10px;
     border-bottom: 1px solid var(--border-color);
     background-color: var(--bg-white);
-    white-space: nowrap;   /* 一行に強制 */
-    overflow: hidden;      /* はみ出し防止 */
 }
 
-/* 製品名の強調（JSでサイズ調整される対象） */
-#estimate-table td strong {
-    display: inline-block; 
-    font-size: 0.95rem;
-    vertical-align: middle;
+#estimate-table td small {
+    font-size: 0.75rem;
+    display: block;
+    margin-top: -2px; /* 少し上に寄せる */
 }
 
-/* --- 合計表示エリア (整理版) --- */
-.total-container {
+/* 数量カラムのデータセル */
+
+#estimate-table td:nth-child(2) {
+    width: 120px;
+    text-align: right;
+}
+
+#estimate-table td:nth-child(3) {
+    text-align: center;   /* 数値を中央に */
+}
+
+#estimate-table td:nth-child(4) {
+    width: 140px;
+    text-align: right;
+}
+
+/* 数量ボタン */
+.qty-btn-container {
     display: flex;
-    justify-content: flex-end; /* 右寄せ */
-    align-items: baseline;
-    margin-top: 20px;
-    padding: 20px 30px;
+    align-items: center;
+    justify-content: center; /* 横方向の中央寄せ */
+    gap: 8px;
+}
+
+.qty-btn {
+    background: var(--bg-white);
+    color: var(--petzl-black);
+    border: 1px solid var(--petzl-black);
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.qty-btn:hover {
     background-color: var(--petzl-yellow);
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 1.3rem;
+}
+
+.delete-btn:hover {
+    color: #ff4444;
+}
+
+/* --- 合計表示（黄色で強調） --- */
+.total-container {
+    text-align: right;
+    margin-top: 30px;
+    padding: 30px;
+    background-color: var(--petzl-yellow); /* 合計は黄色背景 */
     color: var(--petzl-black);
     border-radius: 8px;
-    /* 影を少しシャープにして Petzl らしく */
-    box-shadow: 4px 4px 0px rgba(0,0,0,0.1); 
+    box-shadow: 0 5px 15px rgba(255, 235, 0, 0.3);
 }
 
 .total-label {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     text-transform: uppercase;
-    margin-right: 15px;
-}
-
-#total-price-wrapper {
-    font-family: 'Roboto Mono', monospace;
+    margin-right: 20px;
 }
 
 #total-price {
-    font-size: 3.2rem;
+    font-size: 3rem;
     font-weight: 900;
-    line-height: 1;
-}
-
-.currency-unit {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-left: 5px;
 }
 
 /* --- トースト通知（黄色ベース） --- */
@@ -319,84 +324,92 @@ select {
 /* 通常時は隠す */
 .print-only { display: none; }
 
-/* --- 印刷用最終調整 --- */
 @media print {
-    /* 背景色と色を強制的に印刷 */
+    /* ブラウザの背景色印刷を強制（黄色や黒を出すため） */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
-
-    /* 不要な要素を非表示 */
+    .client-name-area {
+        font-size: 20pt;
+        font-weight: bold;
+        border-bottom: 2px solid #000;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        display: block !important;
+    }
+    
+    .customer-input {
+    width: 100%;
+    max-width: 400px;
+    font-size: 1.2rem;
+    padding: 10px;
+    border: 2px solid var(--petzl-black);
+    border-radius: 4px;
+    background-color: #fff;
+    }
+    
+    /* 操作ボタンや入力フォームを非表示 */
     .no-print, 
     .customer-name-section, 
-    h1, h2, #breadcrumb, 
-    .selection-section, 
-    .qty-btn, .delete-btn, .export-group, .add-btn, 
-    #toast-container {
+    #customer-name-input, 
+    h1, h2, #breadcrumb, .selection-section, 
+    .qty-btn, .delete-btn, .export-group, .add-btn, #toast-container {
         display: none !important;
     }
 
-    /* 印刷専用エリアを表示 */
+    /* 印刷用レイアウトを表示 */
     .print-only {
         display: block !important;
     }
 
-    /* 見積テーブルのレイアウト固定 */
+    /* 見積明細テーブル */
     #estimate-table {
         width: 100%;
         border-collapse: collapse;
-        table-layout: fixed;
-        margin-top: 30px;
+        margin-top: 20px;
     }
 
     #estimate-table th {
         background-color: var(--petzl-black) !important;
         color: #fff !important;
-        padding: 10px;
-        font-size: 9pt;
+        padding: 12px;
     }
 
-    /* カラム幅：削除ボタン列(5列目)を消すため再配分 */
-    #estimate-table th:nth-child(1), #estimate-table td:nth-child(1) { width: 55%; text-align: left; }
-    #estimate-table th:nth-child(2), #estimate-table td:nth-child(2) { width: 15%; text-align: right; }
-    #estimate-table th:nth-child(3), #estimate-table td:nth-child(3) { width: 10%; text-align: center !important; }
-    #estimate-table th:nth-child(4), #estimate-table td:nth-child(4) { width: 20%; text-align: right; }
-    #estimate-table th:nth-child(5), #estimate-table td:nth-child(5) { display: none; } /* 削除ボタン列を非表示 */
+    #estimate-table th:nth-child(3) {
+    width: 80px;         /* 幅を狭く固定 */
+    text-align: center;   /* 中央寄せ */
+    }
+
+    /* 数量カラムのデータセル */
+    #estimate-table td:nth-child(3) {
+    text-align: center;   /* 数値を中央に */
+    }  
 
     #estimate-table td {
         border-bottom: 1px solid #000;
-        padding: 4px 8px !important;
+        padding: 4px 8px !important; /*PDFは詰めるとプロ仕様に*/
         font-size: 10pt;
-        white-space: nowrap; /* JSの自動フォント調整が効くように一行に */
     }
 
-    /* 合計金額ボックス（右下に配置） */
+    /* 右下に配置する合計金額ボックス */
     .total-container {
         float: right;
         width: 320px;
         background-color: var(--petzl-yellow) !important;
         border: 2px solid #000;
         text-align: right;
-        padding: 15px 25px;
+        padding: 20px;
         margin-top: 30px;
-        box-shadow: none; /* 印刷時は影を消す */
-    }
-
-    .total-label {
-        font-size: 12pt;
     }
 
     #total-price {
-        font-size: 28pt;
+        font-size: 2.5rem;
         font-weight: 900;
         color: #000;
     }
-
-    /* 改ページ対策：テーブルの途中でページが切れないように */
-    table { page-break-inside: auto; }
-    tr { page-break-inside: avoid; page-break-after: auto; }
 }
+
 
 /* 3. 画面上でも「プレビュー」として見せたい場合の調整 */
 .customer-name-section {
@@ -440,37 +453,24 @@ select {
         border-radius: 50%;
     }
 
- /* --- 印刷用：全体を右に寄せるイメージの配分 --- */
+    /* 2. テーブル：Petzlカラーを印刷でも維持 */
+    #estimate-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
 
-/* 1列目：製品名（削った分をここに乗せて最大化） */
-#estimate-table th:nth-child(1), 
-#estimate-table td:nth-child(1) { 
-    width: 67%;         /* さらに広く（65% → 70%） */
-    text-align: left; 
-}
+    #estimate-table th {
+        background-color: var(--petzl-black) !important;
+        color: #fff !important;
+        -webkit-print-color-adjust: exact; /* 背景色を強制印刷 */
+        padding: 10px;
+    }
 
-/* 2列目：単価（現状維持） */
-#estimate-table th:nth-child(2), 
-#estimate-table td:nth-child(2) { 
-    width: 12%;         /* 維持 */
-    text-align: right; 
-}
-
-/* 3列目：数量（現状維持） */
-#estimate-table th:nth-child(3), 
-#estimate-table td:nth-child(3) { 
-    width: 8%;          /* 維持 */
-    text-align: center !important; 
-}
-
-/* 4列目：金額（見切れ防止・完全センター寄せ） */
-#estimate-table th:nth-child(4), 
-#estimate-table td:nth-child(4) { 
-    width: 13%;          /* 10%だと少し狭すぎる可能性があるため、13%に微増 */
-    text-align: center !important; 
-    padding-left: 0 !important;   /* 左右の余白をリセットして */
-    padding-right: 0 !important;  /* 枠の真ん中に文字が来るようにする */
-}
+    #estimate-table td {
+        border-bottom: 1px solid #000;
+        padding: 12px 10px;
+    }
 
     /* 3. 合計エリア：画像のように右側に配置 */
     .total-container {
@@ -487,72 +487,66 @@ select {
 }
 /* --- スマートフォン・タブレット向けの調整 --- */
 @media screen and (max-width: 768px) {
-    body {
-        padding: 10px; /* 余白を少し狭く */
+    /* テーブルの「表」という概念を捨てて、縦並びにする */
+    #estimate-table, 
+    #estimate-table thead, 
+    #estimate-table tbody, 
+    #estimate-table tr, 
+    #estimate-table td {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box;
     }
 
-    h1 {
-        font-size: 1.5rem; /* タイトルを少し小さく */
-        margin-bottom: 20px;
+    #estimate-table thead { display: none; } /* ヘッダーを隠す */
+
+    #estimate-table tr {
+        border-bottom: 2px solid #000;
+        padding: 15px 5px;
+        position: relative;
     }
 
-    /* カテゴリボタンを2列に並べる */
-    .button-group {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
+    /* 製品名：横幅いっぱい使い、改行を許可 */
+    #estimate-table td:nth-child(1) {
+        font-weight: bold;
+        font-size: 1.1rem;
+        white-space: normal !important; /* 折り返しを強制 */
+        padding-right: 40px !important; /* 削除ボタンとの重なり防止 */
+        margin-bottom: 10px;
     }
 
-    .button-group button {
-        padding: 12px 10px;
-        font-size: 0.85rem;
+    /* 単価・数量・小計を横に並べる */
+    #estimate-table td:nth-child(2),
+    #estimate-table td:nth-child(3),
+    #estimate-table td:nth-child(4) {
+        display: inline-block !important;
+        width: auto !important;
+        text-align: left !important;
+        margin-right: 15px;
     }
 
-    /* 商品行を「横並び」から「縦型カード」に変更 */
-    .item-row {
-        display: flex;
-        flex-direction: column; /* 縦に積む */
-        align-items: stretch;
-        gap: 15px;
-        padding: 15px;
+    /* 数量ボタンを指で押しやすく巨大化 */
+    .qty-btn-container {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 10px;
+        background: #f0f0f0;
+        padding: 5px 10px;
+        border-radius: 6px;
     }
 
-    .item-row > span:first-child {
-        font-size: 1rem;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 8px;
+    .qty-btn {
+        width: 40px !important;
+        height: 40px !important;
+        line-height: 38px !important;
+        font-size: 1.4rem !important;
     }
 
-    /* カラー・サイズ選択、価格を横に並べる */
-    .item-row > div, 
-    .price-tag {
-        margin-right: 0;
-        text-align: left;
-    }
-
-    /* スマホでは追加ボタンを全幅にして押しやすく */
-    .add-btn {
-        width: 100%;
-        padding: 15px;
-        font-size: 1rem;
-    }
-
-    /* 見積もりテーブルを横スクロール可能に、または簡略化 */
-    #estimate-table th:nth-child(2), 
-    #estimate-table td:nth-child(2) {
-        display: none; /* 単価を隠してスッキリさせる（任意） */
-    }
-
-    #total-price {
-        font-size: 2.2rem;
-    }
-}
-
-/* タップの反応を良くする（モバイル用） */
-@media (hover: none) {
-    .button-group button:active,
-    .add-btn:active {
-        background-color: var(--petzl-yellow);
-        transform: scale(0.98);
+    /* 削除ボタンを右上に固定 */
+    #estimate-table td:nth-child(5) {
+        position: absolute;
+        top: 15px;
+        right: 5px;
+        width: auto !important;
     }
 }

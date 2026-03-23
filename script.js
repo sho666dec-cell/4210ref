@@ -342,7 +342,7 @@ function renderTable() {
     if (!tbody) return;
     tbody.innerHTML = '';
 
-    // 1. 描画前にデータをソート（カテゴリ > サブカテゴリ > 製品名）
+    // 1. ソート処理
     currentEstimateItems.sort((a, b) => 
         a.catName.localeCompare(b.catName, 'ja') || 
         a.subName.localeCompare(b.subName, 'ja') || 
@@ -352,40 +352,42 @@ function renderTable() {
     let total = 0;
     let totalQty = 0;
 
-    // 2. ループを1回にまとめ、HTML作成と計算を同時に行う
+    // 2. HTML作成と計算
     currentEstimateItems.forEach((item, i) => {
         const subtotal = item.price * item.quantity;
         total += subtotal;
         totalQty += item.quantity;
 
+        // 【修正ポイント】スマホでカード化、PCでテーブルを維持する構造
         tbody.innerHTML += `
-        <tr>
-            <td><strong>${item.name}</strong><br><small style="color:#888;">${item.variant}</small></td>
-            <td style="text-align:right;">¥${item.price.toLocaleString()}</td>
-            <td>
-                <div class="qty-btn-container">
-                    <button class="qty-btn" onclick="updateQty(${i},-1)">-</button>
-                    <span style="display:inline-block; min-width:20px; text-align:center;">${item.quantity}</span>
-                    <button class="qty-btn" onclick="updateQty(${i},1)">+</button>
-                </div>
-            </td>
-            <td style="text-align:right; font-weight:bold; color:var(--petzl-black);">¥${subtotal.toLocaleString()}</td>
-            <td style="text-align:center;"><button class="delete-btn" onclick="del(${i})">✕</button></td>
-        </tr>`;
+    <tr>
+        <td class="col-name">
+            <strong>${item.name}</strong><br>
+            <small style="color:#888;">${item.variant}</small>
+        </td>
+        <td class="col-price">¥${item.price.toLocaleString()}</td>
+        <td class="col-qty">
+            <div class="qty-btn-container">
+                <button class="qty-btn minus" onclick="updateQty(${i},-1)">-</button>
+                <span class="qty-display" style="min-width:30px; text-align:center; font-weight:bold;">${item.quantity}</span>
+                <button class="qty-btn plus" onclick="updateQty(${i},1)">+</button>
+            </div>
+        </td>
+        <td class="col-subtotal">¥${subtotal.toLocaleString()}</td>
+        <td class="col-delete">
+           <button class="delete-btn" onclick="del(${i})">✕</button>
+        </td>
+    </tr>`;
     });
 
-    // 3. 画面上の合計金額・合計数量を更新
+    // 3. 合計金額・数量の更新
     const totalPriceElem = document.getElementById('total-price');
-    if (totalPriceElem) {
-        totalPriceElem.innerText = total.toLocaleString();
-    }
+    if (totalPriceElem) totalPriceElem.innerText = total.toLocaleString();
 
     const totalQtyElem = document.getElementById('total-qty');
-    if (totalQtyElem) {
-        totalQtyElem.innerText = totalQty;
-    }
+    if (totalQtyElem) totalQtyElem.innerText = totalQty;
 
-    // 4. ローカルストレージに最新状態を保存
+    // 4. 保存
     localStorage.setItem('petzl_final_v5', JSON.stringify(currentEstimateItems));
 }
 
@@ -477,3 +479,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if(inUser) inUser.addEventListener('input', sync);
     if(inTel) inTel.addEventListener('input', sync);
 });
+
+    // ページ読み込み時に保存データを表示
+    window.onload = () => {
+        if(localStorage.getItem('petzl_final_v5')){
+            currentEstimateItems = JSON.parse(localStorage.getItem('petzl_final_v5'));
+            renderTable();
+    }
+};
